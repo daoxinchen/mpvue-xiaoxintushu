@@ -1,26 +1,28 @@
 <template>
     <div>
-        书列表
-        <button open-type="getUserInfo" lang="zh_CN" @getuserinfo="doLogin">获取用户信息</button>
+        <div v-for="book in books" :key="book.id">{{book.title}}</div>
     </div>
 </template>
 
 <script>
-  import qcloud from 'wafer2-client-sdk'
-  import config from '@/config.js'
+  import {get} from '@/util'
   export default {
-    methods: {
-      doLogin: function (e) {
-        qcloud.setLoginUrl(config.loginUrl)
-        qcloud.login({
-          success: function (userInfo) {
-            console.log('登录成功', userInfo)
-          },
-          fail: function (err) {
-            console.log('登录失败', err)
-          }
-        })
+    data(){
+      return {
+        books: []
       }
-    }
+    },
+    mounted(){
+      this.getList()
+    },
+    methods: {
+      async getList(){
+        const books = await get('/weapp/booklist');
+        this.books = books.data.list
+        console.log(books,'books')
+
+      }
+    },
+    
   }
 </script>

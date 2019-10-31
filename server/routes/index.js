@@ -33,4 +33,9 @@ router.get('/message', controllers.message.get)
 router.post('/message', controllers.message.post)
 
 router.get('/demo',controllers.message.post)
+
+//添加图书
+router.post('/addbook',controllers.addbook)
+router.get('/addbook',controllers.addbook)
+router.get('/booklist',controllers.booklist)
 module.exports = router
