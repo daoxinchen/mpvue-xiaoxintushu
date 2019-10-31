@@ -10,6 +10,9 @@ export default {
 </script>
 
 <style>
+.text-primary {
+  color: #ea5149
+}
 .btn {
   color: white;
   background: #ea5a49;
