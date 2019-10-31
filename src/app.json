@@ -1,6 +1,6 @@
 {
   "pages": [
-    "pages/books/main","pages/me/main","pages/comments/main"
+    "pages/me/main","pages/books/main","pages/comments/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -22,7 +22,7 @@
         "iconPath": "static/img/todo.png",
         "selectedIconPath": "static/img/todo-active.png"
       },{
-        "pagePath": "pages/books/main",
+        "pagePath": "pages/me/main",
         "text": "我",
         "iconPath": "static/img/me.png",
         "selectedIconPath": "static/img/me-active.png"
