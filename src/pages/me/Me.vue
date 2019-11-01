@@ -6,6 +6,7 @@
         </div>
         <YearProgress></YearProgress>
         <button class='btn' @click="scanBook">添加图书</button>
+        <button open-type="getUserInfo" lang="zh_CN" withCredentials="true" bindgetuserinfo="onGotUserInfo">获取用户信息</button>
     </div>
 </template>
 <script>
@@ -77,12 +78,13 @@ export default {
       this.getUserInfo()
     },
     getUserInfo () {
+      console.log(wx.canIUse('button.open-type.getUserInfo'))
       let user = wx.getStorageSync('userinfo')
       if (!user) {
         wx.getUserInfo({
           success: res => {
+            console.log(res,'res')
             console.log(res.userInfo)
-            console.log(res.userInfo.avatarUrl)
             this.userinfo = res.userInfo
             wx.setStorageSync('userinfo', this.userinfo)
           }
@@ -90,13 +92,21 @@ export default {
 
         showSuccess('登录成功')
       }
-    }
+    },
+    onGotUserInfo: function (e) {
+      console.log(e)
+      // console.log(e.detail.errMsg)
+      // console.log(e.detail.userInfo)
+      // console.log(e.detail.rawData)
+    },
+    
   },
   onShow () {
     if (wx.getStorageSync('userinfo')) {
       this.userinfo = wx.getStorageSync('userinfo')
     }
-  }
+  },
+  
 }
 </script>
 <style lang='scss'>

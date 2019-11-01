@@ -1,7 +1,9 @@
 const {mysql} = require('../qcloud')
 
 module.exports = async (ctx)=>{
-    const books = await mysql('books').select('*')
+    const {page} = ctx.request.query
+    const size = 5
+    const books = await mysql('books').select('*').limit(size).offset(Number(page)* size).orderBy('books.id','desc')
 
     ctx.state.data = {
         list:books
