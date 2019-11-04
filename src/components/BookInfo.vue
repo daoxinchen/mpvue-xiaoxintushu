@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="tags">
-            <div class="badge" v-for="tag in info.tags">{{tag}}</div>
+            <div class="badge" v-for="(tag,key) in info.tags" :key="key">{{tag}}</div>
         </div>
         <div class="summary">
             {{info.summary}}

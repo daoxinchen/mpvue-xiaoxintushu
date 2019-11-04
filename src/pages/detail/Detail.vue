@@ -1,35 +1,42 @@
 <template>
     <div>
         <BookInfo :info='info'></BookInfo>
-        <div class="comment">
+        <CommentList :comments="comments"></CommentList>
+        <div class="comment" v-if="showAdd">
             <textarea v-model="comment"
                     class="textarea"
                     :maxlength="100"
                     placeholder="请输入图书评论短评"
             ></textarea>
+            <div class="location">
+                地理位置：
+                <switch color="#EA5A49" :checked='location' @change="getGeo"></switch>
+                <span class="text-primary">{{location}}</span>
+            </div>
+            <div class="phone">
+                手机型号：
+                <switch color="#EA5A49" :checked='phone' @change="getPhone"></switch>
+                <span class="text-primary">{{phone}}</span>
+            </div>
+            <button class="btn" @click="addComment">
+                评论
+            </button>
         </div>
-        <div class="location">
-            地理位置：
-            <switch color="#EA5A49" :checked='location' @change="getGeo"></switch>
-            <span class="text-primary">{{location}}</span>
+        <div v-else class="text-footer">
+            未登录或者已经评论过啦
         </div>
-        <div class="phone">
-            手机型号：
-            <switch color="#EA5A49" :checked='phone' @change="getPhone"></switch>
-            <span class="text-primary">{{phone}}</span>
-        </div>
-        <button class="btn" @click="addComment">
-            评论
-        </button>
+        <button open-type='share' class="btn">转发给好友</button>
     </div>
 </template>
 
 <script>
 import {get,post,showModal} from '@/util'
 import BookInfo from '@/components/BookInfo'
+import CommentList from '@/components/CommentList'
 export default {
     components:{
-        BookInfo
+        BookInfo,
+        CommentList
     },
     data(){
         return {
@@ -39,7 +46,18 @@ export default {
             comment: '',
             location: '',
             phone: '',
-            comments: ''
+            comments: []
+        }
+    },
+    computed:{
+        showAdd(){
+            if(!this.userinfo.nickName){
+                return false;
+            }
+            if(this.comments.filter(v=>v.openid == this.userinfo.nickName).length){
+                return false;
+            }
+            return true
         }
     },
     methods: {
@@ -58,6 +76,7 @@ export default {
             try {
                 await post('/weapp/addcomment',data)
                 this.comment = ''
+                this.getComments();
             } catch(e) {
                 showModal('失败',e.message)
             }
@@ -72,7 +91,8 @@ export default {
         },
         async getComments(){
             const comments = await get('/weapp/commentlist',{bookid:this.bookid})
-            this.comments = comments
+            this.comments = comments.data.list || []
+            console.log(this.comments,"comments")
         },
         getGeo(e){
             //NZxcZYGj0j2IWCOVyozVAextOdrsEFDW 百度地图个人秘钥
@@ -135,11 +155,12 @@ export default {
         background: #eeeeee;
         padding: 10rpx;
     }
+    .location {
+        margin: 10rpx;
+    }
+    .phone {
+        margin: 10rpx;
+    }
 }
-.location {
-    margin: 10rpx;
-}
-.phone {
-    margin: 10rpx;
-}
+
 </style>
